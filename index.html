@@ -109,6 +109,16 @@ body{
   box-sizing:border-box; gap:16px;
   text-align:left;
 }
+.page--hero{
+  justify-content:center;
+  width:min(780px, calc(100vw - 72px));
+  padding-top:72px;
+  padding-bottom:calc(110px + env(safe-area-inset-bottom));
+  gap:24px;
+}
+.page--hero .big{ font-size:clamp(42px,5.8vw,76px); max-width:14em; }
+.page--hero .sub{ font-size:clamp(17px,2vw,22px); max-width:33em; }
+.page--hero .btn{ margin-top:14px; }
 /* 统一清除直接子元素自带外边距，间距全部交给 gap 控制 */
 .page > *{ margin:0; }
 
@@ -236,6 +246,11 @@ body{
   width:100%; box-sizing:border-box; text-align:left;
 }
 .line.show{ opacity:1; transform:none; }
+.line.is-selected{
+  border-left-color:#ffd166;
+  background:linear-gradient(100deg, rgba(255,209,102,.18), rgba(255,122,89,.16));
+  box-shadow:0 0 0 1px rgba(255,209,102,.72), 0 0 28px rgba(255,209,102,.22);
+}
 .line .txt{ font-size:clamp(15px,1.9vw,18px); line-height:1.6; }
 .line .tag{
   display:inline-block; margin-top:10px; padding:5px 12px; border-radius:999px;
@@ -373,17 +388,17 @@ body{
 
 <!-- ===================== 场景 0a · 为什么做（自白点题） ===================== -->
 <section class="scene active" id="scene-why1" data-mood="a">
-  <div class="page">
+  <div class="page page--hero">
     <div class="eyebrow">WHY · 为什么做放下</div>
     <h1 class="big">我不想再做<br>一个让你羞耻的计时器。</h1>
-    <p class="sub">市面上的屏幕管理，只会冷冰冰地说：<br>「你今天又刷了 3 小时 18 分钟。」<br>然后呢？你更想躲进手机里。</p>
+    <p class="sub">市面上的屏幕管理，只会冷冰冰地说：<br>「你今天又刷了 3 小时 14 分钟。」<br>然后呢？你更想躲进手机里。</p>
     <button class="btn" onclick="go('scene-why2')">那我们换个方式 →</button>
   </div>
 </section>
 
 <!-- ===================== 场景 0b · 设计理念（自白 + 原则引子） ===================== -->
 <section class="scene" id="scene-why2" data-mood="a">
-  <div class="page">
+  <div class="page page--hero">
     <div class="eyebrow">设计理念</div>
     <h2 class="big reveal" id="w2-1" style="font-size:clamp(20px,3vw,38px)">我曾经，也停不下来。</h2>
     <p class="sub reveal" id="w2-2">刷到第三、第四个钟头，我知道是错的，想停，却没办法离开。<br>不是因为不自律——是因为一放下手机，就得面对那些我觉得自己做不到的事。</p>
@@ -417,8 +432,8 @@ body{
       <div class="moment"><b>空下来时</b><span>没事干，也不想干。纯粹是懒，没有别的借口。一个接一个，刷到停不下来。</span></div>
     </div>
     <div class="todolist" id="todolist">
-      <div class="todo">写完那封一直拖着的邮件</div>
-      <div class="todo">打开作业文档，只写标题</div>
+      <div class="todo">拍完一条 IP 视频</div>
+      <div class="todo">打开公众号文章，只写标题</div>
       <div class="todo">回妈妈一条消息</div>
       <div class="todo">把明天的计划列出来</div>
       <div class="todo">去阳台站一分钟，看一眼外面</div>
@@ -432,9 +447,9 @@ body{
   <div class="page">
     <div class="eyebrow">FOCUS · 放下</div>
     <div class="vortex"><span></span><span></span><span></span><span></span></div>
-    <h1 class="big">今天，你已经滑过<br>146 个视频。</h1>
+    <h1 class="big">今天，你已经滑过<br>152 个视频。</h1>
     <p class="sub">你不是不自律。你可能只是不知道，<br>该从哪一件事开始。</p>
-    <div class="friend-chip glass"><span class="dot"></span>MAS 在线 · 他答应陪你开始 10 分钟</div>
+    <div class="friend-chip glass"><span class="dot"></span>MAS 在线 · 他承诺陪你开始 10 分钟</div>
     <button class="btn" onclick="go('scene-intercept')">我现在有点停不下来</button>
   </div>
 </section>
@@ -462,7 +477,7 @@ body{
 
       <div class="q-title">③ 现在最小、最不痛苦的一步？</div>
       <div class="choices" data-group="3">
-        <div class="choice" onclick="pick(this)">打开作业文档，只写标题</div>
+        <div class="choice" onclick="pick(this)">打开公众号文章，只写标题</div>
         <div class="choice" onclick="pick(this)">给队友发一句"我现在开始做首页"</div>
       </div>
     </div>
@@ -484,17 +499,17 @@ body{
     <button class="btn ghost" onclick="dissect()">解剖这条视频</button>
 
     <div class="caption" id="caption">
-      <div class="line mis">
+      <div class="line mis" onclick="pickLine(this)">
         <div class="txt">「成功的人都只睡 4 小时。」</div>
         <span class="tag">误导</span>
         <span class="why">以少数个例代替普遍结论。马斯克、乔布斯式的极端作息被当成"标准答案"，忽略了个体差异与代价。</span>
       </div>
-      <div class="line ok">
+      <div class="line ok" onclick="pickLine(this)">
         <div class="txt">「长期睡眠不足会明显影响专注力与情绪。」</div>
         <span class="tag">基本可信</span>
         <span class="why">来源：多项睡眠医学综述一致结论。这恰恰和"少睡更厉害"相矛盾。</span>
       </div>
-      <div class="line emotion">
+      <div class="line emotion" onclick="pickLine(this)">
         <div class="txt">「你必须逼自己更狠一点。」</div>
         <span class="tag">情绪煽动</span>
         <span class="why">这句话激发焦虑，却无法被证伪，也不等于事实。它让你把"我还不够好"的恐惧，错认成动力。</span>
@@ -557,16 +572,16 @@ body{
 <!-- ===================== 场景 5 · 晨光完成 ===================== -->
 <section class="scene" id="scene-done" data-mood="d">
   <div class="page">
-    <div class="eyebrow">你拿回了注意力</div>
-    <h1 class="big">你刚刚做的，也许只是一件小事。<br>但你把注意力，从算法手里拿回来了。</h1>
+    <div class="eyebrow">你抢回了注意力</div>
+    <h1 class="big">你刚刚做的，也许只是一件小事。<br>但你成功从算法手里抢回来了。</h1>
     <div class="stats">
       <div class="stat"><b>1 次</b><span>今天从失控中抽身</span></div>
       <div class="stat"><b>10 分钟</b><span>已完成现实行动</span></div>
       <div class="stat"><b>1 人</b><span>朋友与你并肩</span></div>
-      <div class="stat"><b>23 分钟</b><span>少刷的时间</span></div>
+      <div class="stat"><b>52 分钟</b><span>少刷的时间</span></div>
     </div>
-    <p class="sub">少刷 23 分钟不是目标；<br>重新开始，才是。</p>
-    <button class="btn" onclick="go('scene-why1')">再回到现实里一次</button>
+    <p class="sub">少刷 52 分钟不是目标；<br>重新开始，才是。</p>
+    <button class="btn" onclick="go('scene-why1')">再重新回到现实里</button>
   </div>
 </section>
 
@@ -603,6 +618,11 @@ function pick(self){
   group.querySelectorAll(".choice").forEach(function(c){ c.classList.remove("sel"); });
   self.classList.add("sel");
   self.classList.add("pulse-glow");
+  setTimeout(function(){ self.classList.remove("pulse-glow"); }, 700);
+}
+function pickLine(self){
+  document.querySelectorAll("#caption .line").forEach(function(line){ line.classList.remove("is-selected"); });
+  self.classList.add("is-selected", "pulse-glow");
   setTimeout(function(){ self.classList.remove("pulse-glow"); }, 700);
 }
 
@@ -679,14 +699,14 @@ function spawnRipple(e){
   setTimeout(function(){ r.remove(); }, 900);
 }
 // 给所有"可点"的元素加上 ripple-host（视觉容器：relative + overflow hidden）
-document.querySelectorAll(".btn,.choice,.principle,.moment,.todo,.window-frame,.friend-chip,.stat,.bubble,.linkbox,.vortex").forEach(function(el){
+document.querySelectorAll(".btn,.choice,.principle,.moment,.todo,.line,.window-frame,.friend-chip,.stat,.bubble,.linkbox,.vortex").forEach(function(el){
   el.classList.add("ripple-host");
 });
 document.querySelectorAll(".principle,.moment,.todo,.stat,.friend-chip").forEach(function(el){ el.classList.add("tilt"); });
 
 /* 用事件委托保证任何按钮（包括 .hide 后显示的）点击都有金光涟漪 */
 document.addEventListener("click", function(e){
-  var el = e.target.closest && e.target.closest(".btn,.choice,.principle,.moment,.todo,.window-frame,.friend-chip,.stat,.bubble,.linkbox,.vortex");
+  var el = e.target.closest && e.target.closest(".btn,.choice,.principle,.moment,.todo,.line,.window-frame,.friend-chip,.stat,.bubble,.linkbox,.vortex");
   if(!el) return;
   if(el.classList.contains("hide")) return;
   el.classList.add("ripple-host");
