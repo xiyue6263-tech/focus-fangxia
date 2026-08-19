@@ -326,10 +326,10 @@ body{
 #scene-window .big{ color:#1f2c34; }
 #scene-window .sub{ color:#3a4a54; }
 .window-frame{ align-self:center; width:min(440px,82vw); aspect-ratio:3/2; border-radius:18px; margin:16px 0; position:relative; overflow:hidden;
-  background:linear-gradient(160deg,#bfe3ff,#eafaf1 60%,#ffffff); box-shadow:0 30px 70px rgba(120,160,200,.4); border:8px solid #fff; }
-.window-frame::before{ content:""; position:absolute; left:50%; top:0; bottom:0; width:6px; background:#fff; transform:translateX(-50%); }
-.window-frame::after{ content:""; position:absolute; top:50%; left:0; right:0; height:6px; background:#fff; }
-.window-glow{ position:absolute; inset:0; background:radial-gradient(80% 70% at 62% 34%, rgba(255,255,255,.9), transparent); animation:winpulse 5s ease-in-out infinite; }
+  background:url('./sky.jpg') center/cover no-repeat; box-shadow:0 30px 70px rgba(120,160,200,.4); border:8px solid #fff; }
+.window-frame::before{ content:""; position:absolute; left:50%; top:0; bottom:0; width:6px; background:#fff; transform:translateX(-50%); z-index:2; pointer-events:none; }
+.window-frame::after{ content:""; position:absolute; top:50%; left:0; right:0; height:6px; background:#fff; z-index:2; pointer-events:none; }
+.window-glow{ position:absolute; inset:0; background:radial-gradient(80% 70% at 62% 34%, rgba(255,255,255,.45), transparent); animation:winpulse 5s ease-in-out infinite; z-index:1; pointer-events:none; }
 @keyframes winpulse{ 0%,100%{opacity:.45} 50%{opacity:1} }
 
 /* ---------- 劲爆微交互（涟漪 / 脉冲 / 悬浮 / 粒子 / 鼠标光晕） ---------- */
@@ -526,7 +526,7 @@ body{
             <circle class="ring-fg" id="ring-you" cx="70" cy="70" r="60"/>
           </svg>
           <div class="ring-time" id="time-you">10:00</div>
-          <div class="ring-label">你 · 做黑客松首页</div>
+          <div class="ring-label">喜悦 · 做黑客松首页</div>
         </div>
         <div class="ring-wrap">
           <svg width="140" height="140" viewBox="0 0 140 140">
@@ -678,12 +678,28 @@ function spawnRipple(e){
   host.appendChild(r);
   setTimeout(function(){ r.remove(); }, 900);
 }
-// 给所有"可点"的元素加上涟漪 + 卡片悬浮
+// 给所有"可点"的元素加上 ripple-host（视觉容器：relative + overflow hidden）
 document.querySelectorAll(".btn,.choice,.principle,.moment,.todo,.window-frame,.friend-chip,.stat,.bubble,.linkbox,.vortex").forEach(function(el){
   el.classList.add("ripple-host");
-  el.addEventListener("click", spawnRipple);
 });
 document.querySelectorAll(".principle,.moment,.todo,.stat,.friend-chip").forEach(function(el){ el.classList.add("tilt"); });
+
+/* 用事件委托保证任何按钮（包括 .hide 后显示的）点击都有金光涟漪 */
+document.addEventListener("click", function(e){
+  var el = e.target.closest && e.target.closest(".btn,.choice,.principle,.moment,.todo,.window-frame,.friend-chip,.stat,.bubble,.linkbox,.vortex");
+  if(!el) return;
+  if(el.classList.contains("hide")) return;
+  el.classList.add("ripple-host");
+  var rect = el.getBoundingClientRect();
+  var r = document.createElement("span");
+  r.className = "ripple";
+  var size = Math.max(rect.width, rect.height) * 1.4;
+  r.style.width = r.style.height = size + "px";
+  r.style.left = (e.clientX - rect.left) + "px";
+  r.style.top  = (e.clientY - rect.top)  + "px";
+  el.appendChild(r);
+  setTimeout(function(){ r.remove(); }, 900);
+});
 
 /* ---------- 鼠标跟随光晕 ---------- */
 (function(){
